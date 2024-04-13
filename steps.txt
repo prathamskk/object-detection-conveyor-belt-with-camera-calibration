@@ -1,0 +1,9 @@
+make dependencies folder
+pip download -r requirements.txt -d "./dependencies"
+zip the dependencies folder and send to machine without internet
+
+
+
+unzip the dependencies folder
+cd dependencies
+for %x in (dir *.whl) do python -m pip install %x

@@ -1,0 +1,36 @@
+# On Desktop with Internet
+
+make dependencies folder
+pip download -r requirements.txt -d "./dependencies"
+zip the dependencies folder and pythoninstaller exe  and send to machine without internet
+
+# On Desktop without Internet
+
+install python using exe
+create venv using pip -m venv venv
+activate venv using ./venv/scripts/activate
+
+unzip the dependencies folder
+cd dependencies
+for %x in (dir *.whl) do python -m pip install %x
+
+edit config.json file and update folder path (ensure no special characters in the folder name)
+write in this format for windows "C:\\Users\\Pratham\\BARC\\camera-calibration\\images" 
+
+create "images" folder
+run python getImages.py 
+press s key to save images (capture many images from different angles of the calibration board)
+press esc to close
+
+run python calibration.py
+remove any images that don't get detected properly
+calibration.pkl will be generated
+
+run python getImageCoordinates.py
+press s key to save image
+press esc to close
+it wil create captured_image.jpg
+
+run python extrinsic.py
+extrinsicParams.pkl will be generated
+
