@@ -76,7 +76,7 @@ pickle.dump((cameraMatrix, dist), open( "calibration.pkl", "wb" ))
 
 ############## UNDISTORTION #####################################################
 
-img = cv.imread('C:\\Users\\Pratham\\BARC\\camera-calibration\\images\\images2.png')
+img = cv.imread(folder_path+'\\images\\images2.png')
 h,  w = img.shape[:2]
 newCameraMatrix, roi = cv.getOptimalNewCameraMatrix(cameraMatrix, dist, (w,h), 1, (w,h))
 
