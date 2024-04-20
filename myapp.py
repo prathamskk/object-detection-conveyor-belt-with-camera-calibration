@@ -10,7 +10,6 @@ if last_error == ERROR_ALREADY_EXISTS:
 
 import tkinter as tk
 from tkinter.ttk import *
-from tkinter import ttk
 import cv2
 from PIL import Image, ImageTk
 from tkinter import filedialog
@@ -195,95 +194,6 @@ class_selection_entry.pack(side='left')
 button_frame = tk.Frame(root)
 button_frame.pack(fill='x')
 
-
-
-# Function to go to a new window when clicked on "Camera Calibration" button
-import tkinter as tk
-from tkinter import ttk  # for labelframe
-
-# # Import your calibration functions from calibration.py
-# from calibration import calibrate_camera, save_calibration_data
-
-
-def open_calibration_window():
-  # Create a new window for calibration
-  calibration_window = tk.Tk()
-  calibration_window.title("Camera Calibration")
-
-  # Instructions labelframe
-  instructions_labelframe = ttk.LabelFrame(calibration_window, text="Instructions")
-  instructions_labelframe.pack(padx=10, pady=10)
-  instructions_text = """
-  1. Print a chessboard pattern on a piece of paper.
-  2. Make sure the chessboard is well-lit and flat.
-  3. Place the chessboard in front of the camera.
-  4. Click the 'Capture Frame' button to capture an image of the chessboard.
-  5. Use the mouse to click on the corners of the chessboard in the captured image.
-  6. Click the 'Calibrate Camera' button to calculate the camera parameters.
-  7. Click the 'Save Calibration' button to save the parameters to a file.
-  """
-  instructions_label = tk.Label(instructions_labelframe, text=instructions_text)
-  instructions_label.pack(padx=10, pady=10)
-
-  # Image frame
-  image_frame = ttk.LabelFrame(calibration_window, text="Captured Image")
-  image_frame.pack(padx=10, pady=10)
-  # Create a label to hold the captured image (initially empty)
-  captured_image_label = tk.Label(image_frame)
-  captured_image_label.pack()
-
-  # Button frame
-  button_frame = tk.Frame(calibration_window)
-  button_frame.pack(padx=10, pady=10)
-
-  # Capture frame button
-  capture_button = tk.Button(button_frame, text="Capture Frame", command=lambda: capture_frame(captured_image_label))
-  capture_button.pack(side='left', padx=10)
-
-  # Calibrate button (disabled initially)
-  calibrate_button = tk.Button(button_frame, text="Calibrate Camera", command=lambda: calibrate_camera(), state='disabled')
-  calibrate_button.pack(side='left', padx=10)
-
-  # Save button (disabled initially)
-  save_button = tk.Button(button_frame, text="Save Calibration", command=lambda: save_calibration(), state='disabled')
-  save_button.pack(side='left', padx=10)
-
-  # Logic for capturing frame, calibration, and saving
-  def capture_frame(image_label):
-    # Simulate capturing a frame (replace with your camera logic)
-    image = Image.open("chessboard.jpg")  # Replace with captured image from camera
-    photo_image = ImageTk.PhotoImage(image=image)
-    image_label.config(image=photo_image)
-    image_label.image = photo_image  # Keep a reference to prevent garbage collection
-
-    # Enable calibration button after capturing a frame
-    calibrate_button.config(state='normal')
-
-  def calibrate_camera():
-    # Call your camera calibration function from calibration.py
-    # Assuming calibrate_camera() returns the camera matrix and distortion coefficients
-    global camera_matrix, distortion_coefficients  # Declare variables as global to access in save_calibration
-    camera_matrix, distortion_coefficients = calibrate_camera(captured_image_label)  # Pass the image label for corner detection (if needed)
-
-    # Enable save button after calibration
-    save_button.config(state='normal')
-
-  def save_calibration():
-    # Call your function to save calibration data (camera matrix, distortion coefficients)
-    # Replace 'calibration.pkl' with your desired file name
-    save_calibration_data(camera_matrix, distortion_coefficients, "calibration.pkl")
-
-    # Show a success message
-    message_label = tk.Label(calibration_window, text="Calibration data saved successfully!")
-    message_label.pack()
-
-  calibration_window.mainloop()
-
-
-
-
-
-
 # Create a "Play" button to start the webcam feed
 play_button = tk.Button(button_frame, text="Play", command=start_webcam)
 play_button.pack(side='left')
@@ -299,13 +209,6 @@ file_button.pack(side='left')
 # Create a "Pause/Resume" button to pause or resume video
 pause_button = tk.Button(button_frame, text="Pause/Resume", command=pause_resume_video)
 pause_button.pack(side='left')
-
-
-# Create a "Camera Calibration" button
-camera_calibration_button = tk.Button(button_frame, text="Camera Calibration", command=open_calibration_window)
-camera_calibration_button.pack(side='left')
-
-
 
 # Create a "Quit" button to close the application
 quit_button = tk.Button(button_frame, text="Quit", command=quit_app)
