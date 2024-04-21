@@ -1,3 +1,6 @@
 {
-    "folder_path": "C:\\Users\\Pratham\\BARC\\tkinteryolov8app-main"
+    "folder_path": "C:\\Users\\Pratham\\BARC\\tkinteryolov8app-main",
+    "chessboard_size_x": 10,
+    "chessboard_size_y": 7,
+    "size_of_chessboard_square_in_mm": 15
 }

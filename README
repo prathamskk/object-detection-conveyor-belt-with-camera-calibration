@@ -16,21 +16,14 @@ for %x in (dir *.whl) do python -m pip install %x
 
 edit config.json file and update folder path (ensure no special characters in the folder name)
 write in this format for windows "C:\\Users\\Pratham\\BARC\\camera-calibration\\images" 
+also add chessboard size 
 
 create "images" folder
-run python getImages.py 
-press s key to save images (capture many images from different angles of the calibration board)
-press esc to close
 
-run python calibration.py
-remove any images that don't get detected properly
-calibration.pkl will be generated
+run mainapp.py
 
-run python getImageCoordinates.py
-press s key to save image
-press esc to close
-it wil create captured_image.jpg
+go through calibration wizard
 
-run python extrinsic.py
-extrinsicParams.pkl will be generated
+calibration pkl and extrinsicParams pkl will be generated
 
+now you can run the ml model 
