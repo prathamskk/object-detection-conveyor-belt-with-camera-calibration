@@ -617,10 +617,10 @@ class WebcamScreen:
                         cv2.circle(frame, tuple(point[0]), 3, (255, 255, 0), -1)
                         
                         
-                    h,  w = frame.shape[:2]
-                    newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(self.cameraMatrix, self.dist, (w,h), 1, (w,h))
+                    # h,  w = frame.shape[:2]
+                    # newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(self.cameraMatrix, self.dist, (w,h), 1, (w,h))
                     # Undistort
-                    frame = cv2.undistort(frame, self.cameraMatrix, self.dist, None, newCameraMatrix)
+                    # frame = cv2.undistort(frame, self.cameraMatrix, self.dist, None, newCameraMatrix)
                     # crop the image
                     # x, y, w, h = roi
                     # frame = frame[y:y+h, x:x+w]
