@@ -3,7 +3,6 @@ import cv2
 import os
 import json
 from PIL import Image, ImageTk
-import cv2 as cv
 import numpy as np
 import glob
 import pickle
@@ -153,9 +152,9 @@ class CalibrationWizard:
                     frameSize = (640,480)
 
                     # termination criteria
-                    criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+                    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
                     # termination criteria
-                    criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+                    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 
                     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
@@ -170,20 +169,20 @@ class CalibrationWizard:
                     objpoints = [] # 3d point in real world space
                     imgpoints = [] # 2d points in image plane.
                     
-                    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
                     # Find the chess board corners
-                    ret, corners = cv.findChessboardCorners(gray, chessboardSize, None)
+                    ret, corners = cv2.findChessboardCorners(gray, chessboardSize, None)
 
                     # If found, add object points, image points (after refining them)
                     if ret == True:
                         self.capture_button.config(state=tk.NORMAL)
                         objpoints.append(objp)
-                        corners2 = cv.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
+                        corners2 = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
                         imgpoints.append(corners)
 
                         # Draw and display the corners
-                        cv.drawChessboardCorners(frame, chessboardSize, corners2, ret)
+                        cv2.drawChessboardCorners(frame, chessboardSize, corners2, ret)
                         self.frame_with_corners = frame
                         photo = ImageTk.PhotoImage(image=Image.fromarray(self.frame_with_corners))
                         self.canvas.img = photo
@@ -244,7 +243,7 @@ class CalibrationWizard:
 
 
         # termination criteria
-        criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 
         # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
@@ -259,22 +258,22 @@ class CalibrationWizard:
         imgpoints = [] # 2d points in image plane.
 
         img = self.original_frame
-        gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Find the chess board corners
-        ret, corners = cv.findChessboardCorners(gray, chessboardSize, None)
+        ret, corners = cv2.findChessboardCorners(gray, chessboardSize, None)
 
         # If found, add object points, image points (after refining them)
         if ret == True:
             objpoints.append(objp)
-            corners2 = cv.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
+            corners2 = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
             imgpoints.append(corners)
 
-        cv.destroyAllWindows()
+        cv2.destroyAllWindows()
 
         # Estimate camera pose using SolvePnP
-        success, rotation_vector, translation_vector = cv.solvePnP(objp, corners2, cameraMatrix,
-                                                                    dist, flags=cv.SOLVEPNP_ITERATIVE)
+        success, rotation_vector, translation_vector = cv2.solvePnP(objp, corners2, cameraMatrix,
+                                                                    dist, flags=cv2.SOLVEPNP_ITERATIVE)
 
         # Save the external Parameters result for later use
         pickle.dump((rotation_vector, translation_vector), open( "extrinsicParams.pkl", "wb" ))
@@ -386,7 +385,7 @@ class UndistortErrorScreen:
         frameSize = (640,480)
 
         # termination criteria
-        criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
         # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
         objp = np.zeros((chessboardSize[0] * chessboardSize[1], 3), np.float32)
@@ -403,22 +402,22 @@ class UndistortErrorScreen:
 
         images = glob.glob(folder_path+'\\images\\*.png')
         for image in images:
-            img = cv.imread(image)
-            gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+            img = cv2.imread(image)
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             # Find the chess board corners
-            ret, corners = cv.findChessboardCorners(gray, chessboardSize, None)
+            ret, corners = cv2.findChessboardCorners(gray, chessboardSize, None)
 
             # If found, add object points, image points (after refining them)
             if ret == True:
                 objpoints.append(objp)
-                corners2 = cv.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
+                corners2 = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
                 imgpoints.append(corners)
-        cv.destroyAllWindows()
+        cv2.destroyAllWindows()
         
         ############## CALIBRATION #######################################################
 
-        ret, cameraMatrix, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, frameSize, None, None)
+        ret, cameraMatrix, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, frameSize, None, None)
 
         # Save the camera calibration result for later use (we won't worry about rvecs / tvecs)
         pickle.dump((cameraMatrix, dist), open( "calibration.pkl", "wb" ))
@@ -427,10 +426,10 @@ class UndistortErrorScreen:
 
         img = self.frame_with_corners
         h,  w = img.shape[:2]
-        newCameraMatrix, roi = cv.getOptimalNewCameraMatrix(cameraMatrix, dist, (w,h), 1, (w,h))
+        newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(cameraMatrix, dist, (w,h), 1, (w,h))
 
         # Undistort
-        dst = cv.undistort(img, cameraMatrix, dist, None, newCameraMatrix)
+        dst = cv2.undistort(img, cameraMatrix, dist, None, newCameraMatrix)
 
         # crop the image
         x, y, w, h = roi
@@ -443,8 +442,8 @@ class UndistortErrorScreen:
         mean_error = 0
 
         for i in range(len(objpoints)):
-            imgpoints2, _ = cv.projectPoints(objpoints[i], rvecs[i], tvecs[i], cameraMatrix, dist)
-            error = cv.norm(imgpoints[i], imgpoints2, cv.NORM_L2)/len(imgpoints2)
+            imgpoints2, _ = cv2.projectPoints(objpoints[i], rvecs[i], tvecs[i], cameraMatrix, dist)
+            error = cv2.norm(imgpoints[i], imgpoints2, cv2.NORM_L2)/len(imgpoints2)
             mean_error += error
 
         # print( "total error: {}".format(mean_error/len(objpoints)) )
@@ -618,11 +617,11 @@ class WebcamScreen:
                         cv2.circle(frame, tuple(point[0]), 3, (255, 255, 0), -1)
                         
                         
-                    # h,  w = frame.shape[:2]
-                    # newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(cameraMatrix, dist, (w,h), 1, (w,h))
-                    # # Undistort
-                    # frame = cv2.undistort(frame, cameraMatrix, dist, None, newCameraMatrix)
-                    # # crop the image
+                    h,  w = frame.shape[:2]
+                    newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(self.cameraMatrix, self.dist, (w,h), 1, (w,h))
+                    # Undistort
+                    frame = cv2.undistort(frame, self.cameraMatrix, self.dist, None, newCameraMatrix)
+                    # crop the image
                     # x, y, w, h = roi
                     # frame = frame[y:y+h, x:x+w]
 
